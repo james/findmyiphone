@@ -25,7 +25,11 @@ class FindMyIphone
             }
 
             page = @agent.post(devicesurl)
-            @thedevices = page.content.scan(/tDeviceMgmt.deviceIdMap\['[0-9+]'\] = '([^']+)'/).flatten
+            if @thedevices = page.content.match(/tDeviceMgmt.deviceIdMap\['[0-9+]'\] = '([^']+)'/)
+              @thedevices = @thedevices.captures
+            else
+              raise "No registered devices could be found"
+            end
         end
         return @thedevices
     end
